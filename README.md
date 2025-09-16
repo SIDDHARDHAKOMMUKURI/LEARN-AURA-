@@ -38,7 +38,7 @@ Installation
 
 Clone the repository:
 
-git clone https://github.com/SIDDHARDHAKOMMUKURI/LearnAuraBot.git
+git clonehttps://github.com/SIDDHARDHAKOMMUKURI/LEARN-AURA-BOT.git
 cd LearnAuraBot
 
 
@@ -127,4 +127,5 @@ This project is licensed under the MIT License – see the LICENSE
 Contact
 
 Developer: Siddhardha Kommukuri
+
 
