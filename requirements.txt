@@ -8,5 +8,5 @@ openpyxl
 python-pptx
 odfpy
 pypandoc
-serpapi
+serpapi==0.1.5
 gunicorn
