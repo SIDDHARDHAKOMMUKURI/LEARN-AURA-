@@ -1,4 +1,19 @@
-python-telegram-bot==20.6
-requests==2.31.0
-openai==1.32.2
-serpapi==0.2.2
+# Telegram bot
+python-telegram-bot==20.7
+
+# Environment variables
+python-dotenv
+
+# Database
+pymongo
+
+# HTTP requests
+requests
+
+# Lightweight web server (for uptime ping)
+flask
+
+# Build helpers
+pip>=25.2
+setuptools>=75.0
+wheel
