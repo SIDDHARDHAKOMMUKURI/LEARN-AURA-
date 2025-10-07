@@ -1,5 +1,6 @@
 import os
 from serpapi import GoogleSearch
+
 import json
 
 def search_web(query):
