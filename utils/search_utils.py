@@ -1,6 +1,5 @@
 import os
-from serpapi import GoogleSearch
-
+from serpapi.google_search import GoogleSearch
 def search_web(query: str):
     try:
         search = GoogleSearch({
