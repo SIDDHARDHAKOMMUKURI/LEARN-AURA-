@@ -1,33 +1,42 @@
 import os
-from telegram.ext import Application, CommandHandler
-from handlers.start import start_handler
+from flask import Flask
+from threading import Thread
+from telegram.ext import (
+    ApplicationBuilder, CommandHandler, MessageHandler,
+    CallbackQueryHandler, filters
+)
+from handlers.start import start_handler, help_handler
 from handlers.ask import ask_handler
+from handlers.books import books_handler, book_callback
+from handlers.convert import convert_handler, button_callback, file_upload
 from handlers.search import search_handler
-from handlers.file_transfer import file_handler
-from handlers.motivate import motivate_handler
 
-# --- Load environment variables ---
 BOT_TOKEN = os.getenv("BOT_TOKEN")
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-SERPAPI_KEY = os.getenv("SERPAPI_KEY")
 
-if not BOT_TOKEN:
-    raise ValueError("❌ BOT_TOKEN is missing in environment variables!")
+# Flask for uptime ping
+web_app = Flask(__name__)
 
-# --- Main function ---
-def main():
-    app = Application.builder().token(BOT_TOKEN).build()
+@web_app.route("/")
+def home():
+    return "LearnAuraBot is running!"
 
-    # --- Register command handlers ---
-    app.add_handler(CommandHandler("start", start_handler))
-    app.add_handler(CommandHandler("ask", ask_handler))
-    app.add_handler(CommandHandler("search", search_handler))
-    app.add_handler(CommandHandler("file", file_handler))
-    app.add_handler(CommandHandler("motivate", motivate_handler))
+def run_flask():
+    web_app.run(host="0.0.0.0", port=8080)
 
-    print("✅ LearnAuraBot is running and connected to Telegram...")
-    app.run_polling()
+# Telegram bot setup
+app = ApplicationBuilder().token(BOT_TOKEN).build()
 
-# --- Entry point ---
+app.add_handler(CommandHandler("start", start_handler))
+app.add_handler(CommandHandler("help", help_handler))
+app.add_handler(CommandHandler("ask", ask_handler))
+app.add_handler(CommandHandler("books", books_handler))
+app.add_handler(CommandHandler("convert", convert_handler))
+app.add_handler(CommandHandler("search", search_handler))
+app.add_handler(CallbackQueryHandler(button_callback))
+app.add_handler(CallbackQueryHandler(book_callback))
+app.add_handler(MessageHandler(filters.Document.ALL, file_upload))
+
 if __name__ == "__main__":
-    main()
+    Thread(target=run_flask).start()
+    print("🚀 LearnAuraBot is live.")
+    app.run_polling()
