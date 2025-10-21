@@ -1,14 +1,25 @@
 from telegram import Update
-from telegram.ext import CommandHandler, ContextTypes
+from telegram.ext import ContextTypes
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = (
-        "🌟 Welcome to LearnAuraBot 🌟\n\n"
-        "📚 Features:\n"
-        "/ask <question> – Ask AI (Gemini/OpenAI)\n"
-        "/search <query> – Search the web (SerpAPI)\n"
-        "📂 Send me a file – I’ll convert between PDF, DOCX, PPTX, TXT, Image/Text\n"
+        "🌟 *Welcome to LearnAuraBot!*\n\n"
+        "Your AI-powered learning assistant.\n\n"
+        "🧠 `/ask` – Ask any question (Gemini AI)\n"
+        "📚 `/books` – Download Bhagavad Gita or Mahabharata\n"
+        "🧾 `/convert` – Convert PDF, Word, or Text files\n"
+        "🔍 `/search` – Search topics (via Google)\n"
+        "❓ `/help` – View all commands\n"
     )
-    await update.message.reply_text(text)
+    await update.message.reply_text(text, parse_mode="Markdown")
 
-start_handler = CommandHandler("start", start)
+async def help_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(
+        "💡 *Command Manual*\n"
+        "/start – Welcome menu\n"
+        "/ask – Ask AI any question\n"
+        "/books – Get sacred books (Eng & Telugu)\n"
+        "/convert – Convert files\n"
+        "/search – Web search\n",
+        parse_mode="Markdown"
+    )
