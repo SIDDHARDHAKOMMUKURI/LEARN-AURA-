@@ -1,14 +1,12 @@
 from telegram import Update
-from telegram.ext import CommandHandler, ContextTypes
-from utils.ai_utils import ask_ai
+from telegram.ext import ContextTypes
+from utils.ai_utils import gemini_answer
 
-async def ask(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if not context.args:
-        await update.message.reply_text("❌ Please provide a question. Example: /ask What is AI?")
+async def ask_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    question = " ".join(context.args)
+    if not question:
+        await update.message.reply_text("❓ Type `/ask <your question>`.")
         return
-
-    query = " ".join(context.args)
-    response = ask_ai(query)
-    await update.message.reply_text(response)
-
-ask_handler = CommandHandler("ask", ask)
+    await update.message.reply_text("🤔 Thinking...")
+    reply = await gemini_answer(question)
+    await update.message.reply_text(reply or "⚠️ No response.")
