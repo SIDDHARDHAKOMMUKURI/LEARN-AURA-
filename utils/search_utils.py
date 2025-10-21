@@ -1,5 +1,5 @@
 # utils/search_utils.py
-from serpapi import GoogleSearch
+from .serpapi import GoogleSearch
 import os
 
 def search_web(query):
