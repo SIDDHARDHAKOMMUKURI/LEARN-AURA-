@@ -1,13 +1,13 @@
-# handlers/search.py
-from telegram import Update
-from telegram.ext import ContextTypes
-from utils.search_utils import search_web
+# utils/search_utils.py
+from serpapi import GoogleSearch
+import os
 
-async def search_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    q = " ".join(context.args)
-    if not q:
-        await update.message.reply_text("Usage: /search <topic>")
-        return
-    await update.message.reply_text("🔍 Searching...")
-    res = search_web(q)
-    await update.message.reply_text(res or "❌ No results.")
+def search_web(query):
+    try:
+        search = GoogleSearch({"q": query, "api_key": os.getenv("SERPAPI_KEY")})
+        results = search.get_dict()
+        data = results.get("organic_results", [])
+        txt = "\n\n".join(f"🔹 *{d.get('title','')}*\n{d.get('link','')}" for d in data[:3])
+        return txt
+    except Exception as e:
+        return f"Error: {e}"
